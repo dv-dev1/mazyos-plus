@@ -25,11 +25,19 @@ Skills externas prontas pra instalar. Use como referencia ao criar skills novas 
 
 ## Criar interfaces e paginas web
 
-### Frontend Design
-**O que faz:** Cria interfaces web completas com design de alta qualidade. Gera codigo HTML/CSS/React pronto pra usar, com visual profissional que foge da estetica generica de IA.
-**Bom pra:** Landing pages, dashboards, componentes web, paginas de produto
-**Como instalar:** Ja vem nativo no Claude Code. Chamar com `/frontend-design`
-**Fonte:** Skill nativa do Claude Code
+### Impeccable (constroi)
+**O que faz:** Cria interfaces web completas com design de alta qualidade. Gera codigo HTML/CSS/React pronto pra usar, com visual profissional que foge da estetica generica de IA. Tem comandos proprios: `craft` (do zero), `shape` (feature nova), `polish` (refino), `animate` (motion), `audit` (acessibilidade).
+**Bom pra:** Landing pages, sites de cliente, dashboards, componentes web, paginas de produto
+**Como instalar:** `npx skills add https://github.com/pbakaus/impeccable --skill impeccable` (o `/instalar` ja monta)
+**Fonte:** pbakaus/impeccable
+**Atencao:** e a unica skill que constroi interface no MazyOS. Le `PRODUCT.md` e `DESIGN.md` da raiz do projeto — o `/novo-projeto` gera os dois. Ver a secao "Trabalho de frontend" no `CLAUDE.md` da raiz.
+
+### Design Taste Frontend (regua)
+**O que faz:** Catalogo de "AI tells" — os padroes que denunciam landing page feita por IA. Eyebrow numerado, print de produto falso de `<div>`, faixa de decoracao no hero, em-dash no texto, nome de cliente generico.
+**Bom pra:** Julgar se uma pagina tem cara de template. NAO usar pra construir.
+**Como instalar:** `npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend` (o `/instalar` ja monta)
+**Fonte:** leonxlnx/taste-skill
+**Atencao:** os criterios dela ja estao embutidos no agent `frontend-design-evaluator`. Nao invocar junto com a `impeccable` pra construir a mesma peca — duas direcoes esteticas ao mesmo tempo viram briga de regra, nao qualidade.
 
 ---
 

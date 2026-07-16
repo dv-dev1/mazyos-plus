@@ -104,27 +104,39 @@ Pegar o template correspondente ao perfil escolhido na Fase 1 (`templates/perfis
 
 ## Fase 3.5 — Ferramentas de frontend
 
-O MazyOS usa duas ferramentas externas pra trabalho visual. Elas não vêm no
+O MazyOS usa três ferramentas externas pra trabalho visual. Elas não vêm no
 repo (são de terceiros, e assim atualizam sozinhas) — o `/instalar` monta.
 
 Explicar em uma frase antes, sem despejar o passo a passo seco:
 
-> "Falta ligar duas ferramentas que o sistema usa pra fazer interface:
-> a skill de design da Anthropic e o browser que confere o resultado.
-> São dois comandos, te passo agora."
+> "Falta ligar as ferramentas que o sistema usa pra fazer interface: a skill
+> que constrói, a régua que julga o resultado, e o browser que abre a página
+> pra conferir. Rodo tudo agora."
 
-### 1. Plugin `frontend-design` (Anthropic)
+**Se a pasta ainda vai ser renomeada (Fase 5), avisar antes de instalar:**
 
-Esses são slash commands — **o usuário precisa digitar**, não dá pra rodar por ele. Pedir:
+> "Só um aviso: essas skills criam um atalho que aponta pro caminho atual da
+> pasta. Se você renomear a pasta depois, o atalho quebra e eu deixo de
+> enxergar as skills. Não tem problema — é só me chamar que eu rodo os
+> comandos de novo. Vou te lembrar no final."
 
+### 1. `impeccable` — constrói
+
+```bash
+npx skills add https://github.com/pbakaus/impeccable --skill impeccable
 ```
-/plugin marketplace add anthropics/claude-code
-/plugin install frontend-design@claude-code-plugins
+
+### 2. `design-taste-frontend` — régua anti-cara-de-IA
+
+```bash
+npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend
 ```
 
-Esperar ele confirmar que rodou antes de seguir.
+Os critérios dela já estão embutidos no `frontend-design-evaluator`. Ela é
+instalada pra ficar disponível como consulta — **não invocar junto com a
+`impeccable` pra construir a mesma peça.** Quem constrói é a `impeccable`.
 
-### 2. `playwright-cli` (Microsoft)
+### 3. `playwright-cli` (Microsoft)
 
 Esse dá pra rodar direto. Checar se já existe antes de instalar:
 
@@ -165,8 +177,9 @@ Mostrar pro usuário o que foi configurado:
 ✓ Foco atual: _memoria/estrategia.md
 ✓ Marca: identidade/design-guide.md  [preenchida | em branco — preencher depois]
 ✓ CLAUDE.md adaptado pro perfil [perfil]
-✓ Plugin frontend-design       [instalado | pendente — rodar /plugin install]
-✓ playwright-cli               [instalado | pendente — rodar npx skills add]
+✓ impeccable (constrói)        [instalada | pendente — rodar npx skills add]
+✓ design-taste-frontend (régua) [instalada | pendente — rodar npx skills add]
+✓ playwright-cli (browser)     [instalado | pendente — rodar npx skills add]
 ```
 
 ---
@@ -191,8 +204,30 @@ Mostrar:
 > 2. Renomeia a pasta no Finder (Mac) ou Explorer (Windows) — ou no
 >    terminal fora dela: `mv <nome-atual> <slug>`
 > 3. Abre o VS Code de novo na pasta renomeada
+> 4. Me fala 'renomeei' — as skills de design apontam pro caminho antigo e
+>    eu preciso religar elas (é um comando, rápido)
 >
 > Se preferir outro nome, me fala que eu ajusto a sugestão."
+
+**Quando o usuário voltar e disser que renomeou**, religar as skills. O
+`npx skills add` grava em `.agents/skills/` e cria um link em
+`.claude/skills/` com o **caminho absoluto** — renomear a pasta quebra esse
+link, e a skill some sem dar erro. Rodar de novo, já dentro da pasta nova:
+
+```bash
+npx skills add https://github.com/pbakaus/impeccable --skill impeccable
+npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend
+```
+
+Conferir que voltaram antes de dar por encerrado:
+
+```bash
+npx skills list
+```
+
+Não usar `npx skills experimental_install` pra isso — ele restaura
+`.agents/` mas não recria o link do Claude Code, e o resultado é uma skill
+que existe em disco e mesmo assim não carrega.
 
 Se a pasta já tem nome próprio (não genérico), pular essa fase.
 

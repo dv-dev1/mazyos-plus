@@ -50,40 +50,71 @@ padrão de repetição for claro.
 
 Vale pra **qualquer** interface: site de cliente, landing page, portfólio,
 página de captura, componente, app. Sempre que a tarefa produzir HTML/CSS
-que alguém vai olhar, os dois passos abaixo são obrigatórios. Não são
+que alguém vai olhar, os três passos abaixo são obrigatórios. Não são
 opcionais e não dependem do usuário pedir.
 
-### 1. Construir com a skill `frontend-design`
+**Uma skill constrói, outra julga.** A `impeccable` constrói. A
+`design-taste-frontend` não é invocada junto — a régua dela virou critério
+do evaluator, que julga depois. Nunca invocar as duas pra construir a mesma
+peça: duas direções estéticas ao mesmo tempo viram briga de regra no meio
+da tarefa, não qualidade.
+
+### 1. Carregar o contexto antes de construir
+
+A `impeccable` lê `PRODUCT.md` e `DESIGN.md` da raiz do projeto. Esses dois
+arquivos são a ponte entre o MazyOS e a skill. **Sem eles ela para e abre
+uma entrevista** que o `/instalar` e o `/novo-projeto` já fizeram — puro
+retrabalho, e o motivo de nunca invocar a skill "crua" aqui dentro.
+
+- **Projeto de cliente:** o `/novo-projeto` já gera os dois. Conferir se
+  existem antes de começar.
+- **Não existem ainda:** gerar a partir de `_memoria/empresa.md`,
+  `identidade/design-guide.md` e o briefing do projeto — **antes** de
+  invocar a skill. Nunca deixar a skill perguntar o que o MazyOS já sabe.
+- `identidade/design-guide.md` **manda.** Quando o design-guide fixa uma
+  decisão (cor, fonte, border-radius), ela vence a preferência da skill.
+  O `DESIGN.md` é a tradução do design-guide pro formato que a skill lê —
+  se os dois divergirem, o design-guide é a fonte da verdade e o `DESIGN.md`
+  é que está desatualizado.
+
+Referência que o usuário trouxer (Pinterest, print de site, link) entra no
+brief. É o que mais separa o resultado da cara de IA. Se ele não trouxe
+nenhuma, **pedir antes de começar**.
+
+### 2. Construir com a skill `impeccable`
 
 Antes de escrever qualquer linha de código de interface, invocar a skill
-**`frontend-design`** (plugin oficial da Anthropic, instalado pelo
-`/instalar`). Ela força direção estética deliberada, tipografia com
-personalidade e um elemento de assinatura — em vez do padrão genérico que
-sai por default.
+**`impeccable`** (instalada pelo `/instalar`). Ela força direção estética
+deliberada, tipografia com personalidade e escolhas assumidas — em vez do
+padrão genérico que sai por default.
 
-Antes de invocar, carregar o contexto visual:
+Comandos que mais importam aqui:
 
-- `identidade/design-guide.md` — cores, fontes, logo do negócio. **A
-  identidade manda.** Quando o design-guide fixa uma decisão, ela vence a
-  preferência da skill.
-- Referências que o usuário trouxer (Pinterest, print de site, link) —
-  passar como parte do brief. A referência do usuário é o que separa o
-  trabalho da cara de IA. Se ele não trouxe nenhuma, **pedir uma antes de
-  começar**.
+| Comando | Quando usar |
+|---|---|
+| `$impeccable craft` | Página ou seção nova, do zero |
+| `$impeccable shape` | Feature nova dentro de algo que já existe |
+| `$impeccable polish` | Refino de peça pronta |
+| `$impeccable animate` | Motion, micro-interação, scroll reveal |
+| `$impeccable audit` | Acessibilidade, contraste, responsivo |
 
-Se a skill não estiver instalada:
+Landing page e site de cliente são **register `brand`** (o design É o
+produto), não `product`. O `PRODUCT.md` gerado pelo `/novo-projeto` já
+marca isso — conferir se estiver escrevendo o arquivo na mão.
 
-```
-/plugin marketplace add anthropics/claude-code
-/plugin install frontend-design@claude-code-plugins
-```
+**Animação do site é aqui.** A `impeccable` cobre motion em `animate.md`,
+`interaction-design.md` e `overdrive.md`. Não instalar skill de GSAP por
+fora: o que falta nunca é a API da biblioteca, é o julgamento de quando
+animar. Vale a regra dela — uma animação de assinatura bem feita vale mais
+que micro-interação espalhada, e `prefers-reduced-motion` não é opcional.
 
-### 2. Avaliar com o agent `frontend-design-evaluator`
+### 3. Avaliar com o agent `frontend-design-evaluator`
 
 Terminou de construir, **antes de mostrar pro usuário**, rodar o agent
 `frontend-design-evaluator` (`.claude/agents/`). Ele sobe a página no
 browser via `playwright-cli`, olha nos 3 viewports e dá nota de 0 a 10 em
-4 critérios, penalizando padrões de "AI slop".
+4 critérios, penalizando padrões de "AI slop" — inclusive a régua
+anti-cara-de-IA da `design-taste-frontend`, que está embutida nele.
 
 - **Nota < 7:** não entrega. Aplicar os "Top 3 Improvements" do relatório
   e rodar de novo. Repetir até passar de 7 ou até o evaluator recomendar
@@ -109,11 +140,22 @@ juiz do que construiu.
 
 ### Ferramentas
 
-| Peça | Instalação | Dono |
-|---|---|---|
-| `frontend-design` | `/plugin install frontend-design@claude-code-plugins` | Anthropic |
-| `playwright-cli` | `npx skills add microsoft/playwright-cli` | Microsoft |
-| `frontend-design-evaluator` | já vem no repo (`.claude/agents/`) | este projeto |
+| Peça | Papel | Instalação | Dono |
+|---|---|---|---|
+| `impeccable` | constrói | `npx skills add https://github.com/pbakaus/impeccable --skill impeccable` | pbakaus |
+| `design-taste-frontend` | régua (embutida no evaluator) | `npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend` | leonxlnx |
+| `playwright-cli` | browser | `npx skills add microsoft/playwright-cli` | Microsoft |
+| `frontend-design-evaluator` | julga | já vem no repo (`.claude/agents/`) | este projeto |
+
+As três primeiras são de terceiros e não são versionadas aqui — o
+`/instalar` monta, e assim elas atualizam sozinhas (`npx skills update`).
+
+**Cuidado com o symlink.** O `npx skills add` grava os arquivos em
+`.agents/skills/` e cria um link em `.claude/skills/` apontando pro
+**caminho absoluto**. Se a pasta do projeto for renomeada ou movida depois,
+o link quebra e a skill somem sem avisar. Sintoma: a skill não aparece mais.
+Conserto: rodar o `npx skills add` de novo. (`npx skills experimental_install`
+não resolve — ele restaura `.agents/` mas não recria o link do Claude Code.)
 
 ---
 

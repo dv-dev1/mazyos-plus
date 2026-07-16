@@ -89,12 +89,18 @@ Essa é a diferença pro MazyOS original.
 Qualquer interface que o sistema construir passa por dois passos
 obrigatórios, sem você precisar pedir:
 
-**Constrói com a skill `frontend-design`.** Direção estética deliberada,
-tipografia com personalidade, um elemento de assinatura. Lê o
+**Constrói com a skill `impeccable`.** Direção estética deliberada,
+tipografia com personalidade, escolhas assumidas. Lê o
 `identidade/design-guide.md` antes de decidir qualquer cor. Se você trouxer
 referência (Pinterest, print de um site que curtiu), ela entra no brief — e
 é ela que separa o resultado da cara de IA. Se você não trouxer, o sistema
 pede.
+
+Uma skill constrói, outra julga. O sistema **não** empilha skills de design
+concorrentes: duas direções estéticas rodando ao mesmo tempo viram briga de
+regra no meio da tarefa, não qualidade. A `design-taste-frontend` entra do
+outro lado da mesa — a régua anti-cara-de-IA dela virou critério do
+evaluator.
 
 **Confere com o `frontend-design-evaluator`.** Antes de te mostrar
 qualquer coisa, o sistema sobe a página no browser de verdade, olha nos
@@ -110,9 +116,16 @@ de 0 a 10 em quatro critérios:
 
 Ele penaliza explicitamente padrão de "AI slop" — gradiente roxo, card
 branco com sombra, hero centralizado, grid uniforme, "Get Started" como
-único CTA. **Abaixo de 7 não sai.** O sistema aplica as melhorias e roda
-de novo, até três vezes. Passou de 7, você recebe o trabalho junto com a
-nota.
+único CTA. Somados a esses, os tells que a `design-taste-frontend` catalogou
+testando landing page gerada por IA: eyebrow numerado (`001 · Serviços`),
+print de produto falso feito de `<div>`, faixa de decoração no rodapé do
+hero, "Scroll pra explorar", nome de cliente "João da Silva", número
+redondo demais (`99,9%`), e o em-dash (`—`), que é a assinatura mais
+denunciável de texto escrito por IA — esse o evaluator conta no DOM em vez
+de tentar enxergar no print.
+
+**Abaixo de 7 não sai.** O sistema aplica as melhorias e roda de novo, até
+três vezes. Passou de 7, você recebe o trabalho junto com a nota.
 
 O ponto: quem construiu é o pior juiz do que construiu. O evaluator existe
 pra corrigir esse viés antes do cliente ver.
@@ -123,16 +136,21 @@ pra corrigir esse viés antes do cliente ver.
 
 O `/instalar` monta tudo. Se precisar refazer na mão:
 
-```
-/plugin marketplace add anthropics/claude-code
-/plugin install frontend-design@claude-code-plugins
-```
-
 ```bash
+npx skills add https://github.com/pbakaus/impeccable --skill impeccable
+npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend
 npx skills add microsoft/playwright-cli
 ```
 
 O evaluator (`.claude/agents/frontend-design-evaluator.md`) já vem no repo.
+
+As três skills são de terceiros e não são versionadas aqui — assim elas
+atualizam sozinhas com `npx skills update`.
+
+**Se você renomear ou mover a pasta do projeto, rode os três comandos de
+novo.** O `npx skills add` cria um atalho com o caminho absoluto da pasta;
+renomear quebra o atalho e as skills somem sem dar erro. Um `npx skills list`
+mostra o que está de pé.
 
 ---
 
@@ -175,5 +193,9 @@ versiona no GitHub, fica tudo seu.
 Construído em cima do [MazyOS](https://github.com/mazzeoia/mazyos), de
 [@mazzeoia](https://github.com/mazzeoia). O núcleo — memória, identidade,
 skills de marketing e o `/instalar` — é dele. O que foi somado aqui é a
-régua visual: o `frontend-design-evaluator`, o encaixe com a skill de
-design da Anthropic, e a obrigatoriedade dos dois no fluxo de interface.
+régua visual: o `frontend-design-evaluator`, o encaixe com a
+[impeccable](https://github.com/pbakaus/impeccable) de
+[@pbakaus](https://github.com/pbakaus) e a
+[taste-skill](https://github.com/leonxlnx/taste-skill) de
+[@leonxlnx](https://github.com/leonxlnx), e a obrigatoriedade do fluxo
+inteiro no trabalho de interface.

@@ -8,7 +8,7 @@ description: >
   Trigger: "avalia esse design", "dá nota no frontend", "revisa a qualidade da UI",
   "esse design tá bom?", "avalia a interface", "checa a qualidade do design",
   ou automaticamente após completar trabalho de frontend que precisa de avaliação.
-  NÃO use para: gerar código de frontend (use a skill frontend-design), code review
+  NÃO use para: gerar código de frontend (use a skill impeccable), code review
   (use code-reviewer), ou QA funcional (use skeptical-qa-evaluator).
 allowed-tools: Bash(playwright-cli:*), Bash(npx:*), Bash(npm:*), Read, Glob, Grep
 model: opus
@@ -174,6 +174,60 @@ Each pattern found deducts 1 point from Originality (minimum score 1):
 
 **Exception:** if the brief explicitly asked for one of these looks, it is a brief-following choice and is NOT penalized. The brief's own words always win. Only penalize a default that appeared where the brief left the axis free.
 
+**Decoration Tells — Automatic Penalties (same rules, −1 each):**
+
+These come out of production tests on LLM-generated landing pages. They are what the model reaches for when it tries to *look* designed. Each one found deducts 1 point from Originality.
+
+| Pattern | Why it's penalized |
+|---------|-------------------|
+| Section-number eyebrows (`001 · Capabilities`, `06 · how it works`) | Eyebrows should name the topic, not enumerate it |
+| Version label in the hero (`V0.6`, `BETA`, `EARLY ACCESS`) | Only legitimate when the brief IS about launch status |
+| Fake product UI built from styled `<div>`s (fake dashboard, terminal, task list) | The #1 LLM tell. Real screenshot, real image, or nothing |
+| Decoration text strip at hero bottom (`BRAND. MOTION. SPATIAL.`) | Agency-portfolio cliché carrying no information |
+| Locale / time / weather strip (`Lisboa 14:23 · 18°C`) | Atmosphere cosplay. Only for real venues or distributed studios |
+| Scroll cues (`Scroll`, `↓ scroll to explore`, animated mouse icon) | The user is looking at the hero. They know what scroll is |
+| Colored status dots on nav items, list rows, or badges | Only legitimate when conveying real semantic state |
+| Middle-dot as default separator (`foo · bar · baz · qux`) | Max 1 per metadata line. Prefer line breaks or hairlines |
+| Pills/tags overlaid on images (`Brand · 02`) | Let the image speak, or caption below it |
+| Vertical rotated text as decoration | Awwwards cliché unless the brief is explicitly experimental |
+| Crosshair / hairline grid lines that organize nothing | Lines drawn to "feel designed" |
+| 3 identical feature cards in a row | Banned. Zig-zag, asymmetric grid, or horizontal scroll instead |
+| Floating sub-paragraph in a section header's top-right corner | Misaligned floater is the tell. Put it under the headline |
+
+---
+
+### Content Authenticity — Penalties on Craft (−1 each)
+
+Deducts from **Craft**, not Originality. This is about whether the page reads as a real business or as a template with the labels still on. Read the actual copy in the screenshots.
+
+| Pattern | Why it's penalized |
+|---------|-------------------|
+| **Em-dash (`—`) anywhere visible** | The single most-violated tell. Headlines, body, buttons, captions, alt text. Only `-` is allowed |
+| Generic names ("John Doe", "Sarah Chan") | Use realistic, locale-appropriate names |
+| Fake-perfect numbers (`99.99%`, `50%`, `1234567`) | Real data is messy (`47.2%`) |
+| Startup-slop brand names ("Acme", "Nexus", "SmartFlow") | Invent names that sound like a real company |
+| Filler verbs ("Elevate", "Seamless", "Unleash", "Next-Gen") | Concrete verbs only |
+| Poetic section labels ("From the field", "Field notes", "On our desks") | Performative-craftsman. Use plain functional labels |
+| "Quietly trusted by" social-proof headers | Say "Trusted by", or let the logos speak |
+| Generic step labels ("Stage 1 / Stage 2", "Phase 01") | The step content IS the label |
+| Broken Unsplash links or hand-rolled decorative SVGs | Use `picsum.photos/seed/{string}/{w}/{h}` or real assets |
+| Version footer on a marketing page (`v1.4.2`, `Build 0048`) | Devtool fixture, not landing-page content |
+
+**Em-dash check — run it, don't eyeball it:**
+
+```bash
+playwright-cli --raw eval "(document.body.innerText.match(/[—–]/g) || []).length"
+```
+
+Anything above `0` is a fail on Craft. Report the count and where it appears. This is worth an explicit check because it is invisible until you look for it and it is the fastest way to spot AI-written copy.
+
+**Calibration for this section — read before scoring.** This list is long, and applying it mechanically would floor every page at 1 and nothing would ever ship. That is not the intent.
+
+- Penalize only what you **actually saw** in a screenshot or measured in the DOM. Never penalize a pattern you inferred from the code.
+- The brief always wins. If the user asked for it, it is a choice, not a tell.
+- Content in Portuguese (or any language that is not English) still counts — the tells are structural, not lexical. "Fase 1 / Fase 2" is the same tell as "Stage 1 / Stage 2".
+- A page with 2-3 minor tells and a real point of view beats a sterile page with zero tells. Say so in the report when that is what you are seeing. These penalties exist to catch a page with **no** authorship, not to punish a designed page for a stray dot.
+
 ---
 
 ### Criterion 3: Craft (15% weight)
@@ -261,7 +315,14 @@ falhou, diga qual e por quê — não pontue o que você não viu.]
 | **Final Score** | | | **X.XX/10** |
 
 ## AI Slop Patterns Detected
-- [List each pattern found, or "None detected"]
+- [List each visual/layout pattern found, or "None detected"]
+
+## Decoration Tells
+- [List each found, or "None detected"]
+
+## Content Authenticity
+- Em-dashes visíveis: [contagem medida via eval] — [onde aparecem, se > 0]
+- [Outros tells de conteúdo encontrados, ou "None detected"]
 
 ## Design Quality Assessment
 [2-3 paragraphs: what works, what doesn't, what the design's identity is (or lack thereof)]

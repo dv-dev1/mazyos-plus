@@ -14,6 +14,18 @@ Thumbs.db
 .claude/file-history/
 .claude/backups/
 
+# Skills de terceiros — o /instalar monta via `npx skills add`, não versionar.
+# O CLI grava em .agents/skills/ e cria um symlink em .claude/skills/.
+# As skills DO MazyOS (.claude/skills/abrir, /carrossel, etc) continuam versionadas.
+.agents/
+.claude/skills/impeccable
+.claude/skills/design-taste-frontend
+.claude/skills/playwright-cli
+skills-lock.json
+
+# Live mode da impeccable (config local de browser)
+.impeccable/
+
 # Dependências
 node_modules/
 
