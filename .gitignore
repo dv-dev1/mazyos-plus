@@ -14,12 +14,13 @@ Thumbs.db
 .claude/file-history/
 .claude/backups/
 
-# Skills de terceiros — o /instalar monta via `npx skills add`, não versionar.
-# O CLI grava em .agents/skills/ e cria um symlink em .claude/skills/.
-# As skills DO MazyOS (.claude/skills/abrir, /carrossel, etc) continuam versionadas.
+# As skills de design (impeccable, design-taste-frontend) SÃO versionadas —
+# vêm embutidas pra funcionar no clone, sem instalar nada. Ver
+# .claude/skills/PROCEDENCIA.md. Não adicionar elas aqui.
+
+# Skills instaladas via `npx skills add` (playwright-cli). O CLI grava em
+# .agents/skills/ e cria symlink em .claude/skills/.
 .agents/
-.claude/skills/impeccable
-.claude/skills/design-taste-frontend
 .claude/skills/playwright-cli
 skills-lock.json
 

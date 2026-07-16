@@ -84,19 +84,19 @@ nenhuma, **pedir antes de começar**.
 ### 2. Construir com a skill `impeccable`
 
 Antes de escrever qualquer linha de código de interface, invocar a skill
-**`impeccable`** (instalada pelo `/instalar`). Ela força direção estética
-deliberada, tipografia com personalidade e escolhas assumidas — em vez do
-padrão genérico que sai por default.
+**`impeccable`** (já vem embutida no repo, em `.claude/skills/impeccable/`).
+Ela força direção estética deliberada, tipografia com personalidade e
+escolhas assumidas — em vez do padrão genérico que sai por default.
 
 Comandos que mais importam aqui:
 
 | Comando | Quando usar |
 |---|---|
-| `$impeccable craft` | Página ou seção nova, do zero |
-| `$impeccable shape` | Feature nova dentro de algo que já existe |
-| `$impeccable polish` | Refino de peça pronta |
-| `$impeccable animate` | Motion, micro-interação, scroll reveal |
-| `$impeccable audit` | Acessibilidade, contraste, responsivo |
+| `/impeccable craft` | Página ou seção nova, do zero |
+| `/impeccable shape` | Feature nova dentro de algo que já existe |
+| `/impeccable polish` | Refino de peça pronta |
+| `/impeccable animate` | Motion, micro-interação, scroll reveal |
+| `/impeccable audit` | Acessibilidade, contraste, responsivo |
 
 Landing page e site de cliente são **register `brand`** (o design É o
 produto), não `product`. O `PRODUCT.md` gerado pelo `/novo-projeto` já
@@ -140,22 +140,28 @@ juiz do que construiu.
 
 ### Ferramentas
 
-| Peça | Papel | Instalação | Dono |
+| Peça | Papel | De onde vem | Dono |
 |---|---|---|---|
-| `impeccable` | constrói | `npx skills add https://github.com/pbakaus/impeccable --skill impeccable` | pbakaus |
-| `design-taste-frontend` | régua (embutida no evaluator) | `npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend` | leonxlnx |
-| `playwright-cli` | browser | `npx skills add microsoft/playwright-cli` | Microsoft |
+| `impeccable` | constrói | embutida (`.claude/skills/impeccable/`) | pbakaus |
+| `design-taste-frontend` | régua (critérios no evaluator) | embutida (`.claude/skills/design-taste-frontend/`) | leonxlnx |
 | `frontend-design-evaluator` | julga | já vem no repo (`.claude/agents/`) | este projeto |
+| `playwright-cli` | browser | `npx skills add microsoft/playwright-cli` | Microsoft |
 
-As três primeiras são de terceiros e não são versionadas aqui — o
-`/instalar` monta, e assim elas atualizam sozinhas (`npx skills update`).
+**As skills de design são versionadas dentro do repo.** Clonou, funcionam —
+sem `npx`, sem rede, sem comando. Procedência, licença e como atualizar estão
+em `.claude/skills/PROCEDENCIA.md`.
 
-**Cuidado com o symlink.** O `npx skills add` grava os arquivos em
-`.agents/skills/` e cria um link em `.claude/skills/` apontando pro
-**caminho absoluto**. Se a pasta do projeto for renomeada ou movida depois,
-o link quebra e a skill somem sem avisar. Sintoma: a skill não aparece mais.
-Conserto: rodar o `npx skills add` de novo. (`npx skills experimental_install`
-não resolve — ele restaura `.agents/` mas não recria o link do Claude Code.)
+Nunca rodar `npx skills add` pra `impeccable` ou `design-taste-frontend`: o
+CLI instala a variante `.agents/` (genérica, escrita pra Codex — ela chega a
+dizer "GPT is capable of extraordinary work") por cima da variante `.claude/`
+embutida aqui, que é a correta pro Claude Code.
+
+Só o `playwright-cli` é instalado, porque baixa binário de browser. Ele usa
+symlink com caminho absoluto: **renomear ou mover a pasta do projeto quebra
+o link e a skill some sem avisar.** Conserto: rodar o `npx skills add` de
+novo. (`npx skills experimental_install` não resolve — restaura `.agents/`
+mas não recria o link do Claude Code.) As skills embutidas não têm esse
+problema: são arquivo de verdade e sobrevivem a rename, move e zip.
 
 ---
 

@@ -104,39 +104,31 @@ Pegar o template correspondente ao perfil escolhido na Fase 1 (`templates/perfis
 
 ## Fase 3.5 — Ferramentas de frontend
 
-O MazyOS usa três ferramentas externas pra trabalho visual. Elas não vêm no
-repo (são de terceiros, e assim atualizam sozinhas) — o `/instalar` monta.
+**As skills de design já vieram no clone.** `impeccable` (constrói) e
+`design-taste-frontend` (régua) estão embutidas em `.claude/skills/` e
+funcionam sem instalar nada — ver `.claude/skills/PROCEDENCIA.md`. Não rodar
+`npx skills add` pra elas: isso instalaria a variante genérica por cima da
+que já está aqui.
 
-Explicar em uma frase antes, sem despejar o passo a passo seco:
-
-> "Falta ligar as ferramentas que o sistema usa pra fazer interface: a skill
-> que constrói, a régua que julga o resultado, e o browser que abre a página
-> pra conferir. Rodo tudo agora."
-
-**Se a pasta ainda vai ser renomeada (Fase 5), avisar antes de instalar:**
-
-> "Só um aviso: essas skills criam um atalho que aponta pro caminho atual da
-> pasta. Se você renomear a pasta depois, o atalho quebra e eu deixo de
-> enxergar as skills. Não tem problema — é só me chamar que eu rodo os
-> comandos de novo. Vou te lembrar no final."
-
-### 1. `impeccable` — constrói
+Conferir que estão de pé (rápido, e pega clone corrompido):
 
 ```bash
-npx skills add https://github.com/pbakaus/impeccable --skill impeccable
+node .claude/skills/impeccable/scripts/context.mjs
 ```
 
-### 2. `design-taste-frontend` — régua anti-cara-de-IA
+Responder `NO_PRODUCT_MD` é **sucesso** — significa que o script rodou e não
+achou `PRODUCT.md`, que é o esperado na raiz do MazyOS. Se der erro de
+módulo ou arquivo não encontrado, o clone veio incompleto: pedir pro usuário
+rodar `git pull` ou clonar de novo.
 
-```bash
-npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend
-```
+Falta só o browser, que precisa baixar binário e por isso não cabe no repo.
+Explicar em uma frase antes:
 
-Os critérios dela já estão embutidos no `frontend-design-evaluator`. Ela é
-instalada pra ficar disponível como consulta — **não invocar junto com a
-`impeccable` pra construir a mesma peça.** Quem constrói é a `impeccable`.
+> "As skills de design já vieram junto com o sistema, não precisa instalar.
+> Falta só o browser que eu uso pra abrir a página e conferir o resultado.
+> Rodo agora."
 
-### 3. `playwright-cli` (Microsoft)
+### `playwright-cli` (Microsoft)
 
 Esse dá pra rodar direto. Checar se já existe antes de instalar:
 
@@ -177,8 +169,8 @@ Mostrar pro usuário o que foi configurado:
 ✓ Foco atual: _memoria/estrategia.md
 ✓ Marca: identidade/design-guide.md  [preenchida | em branco — preencher depois]
 ✓ CLAUDE.md adaptado pro perfil [perfil]
-✓ impeccable (constrói)        [instalada | pendente — rodar npx skills add]
-✓ design-taste-frontend (régua) [instalada | pendente — rodar npx skills add]
+✓ impeccable (constrói)        já vem no repo
+✓ design-taste-frontend (régua) já vem no repo
 ✓ playwright-cli (browser)     [instalado | pendente — rodar npx skills add]
 ```
 
@@ -204,30 +196,24 @@ Mostrar:
 > 2. Renomeia a pasta no Finder (Mac) ou Explorer (Windows) — ou no
 >    terminal fora dela: `mv <nome-atual> <slug>`
 > 3. Abre o VS Code de novo na pasta renomeada
-> 4. Me fala 'renomeei' — as skills de design apontam pro caminho antigo e
->    eu preciso religar elas (é um comando, rápido)
 >
 > Se preferir outro nome, me fala que eu ajusto a sugestão."
 
-**Quando o usuário voltar e disser que renomeou**, religar as skills. O
-`npx skills add` grava em `.agents/skills/` e cria um link em
-`.claude/skills/` com o **caminho absoluto** — renomear a pasta quebra esse
-link, e a skill some sem dar erro. Rodar de novo, já dentro da pasta nova:
+As skills de design são embutidas (arquivo de verdade, não link), então
+sobrevivem ao rename sem precisar de nada.
+
+O `playwright-cli` é a exceção: o `npx skills add` cria um symlink com
+**caminho absoluto**, e renomear a pasta quebra esse link — a skill some sem
+dar erro. Se o usuário voltar dizendo que renomeou e o evaluator reclamar de
+browser, é isso. Conserto, já dentro da pasta nova:
 
 ```bash
-npx skills add https://github.com/pbakaus/impeccable --skill impeccable
-npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend
+npx skills add microsoft/playwright-cli
 ```
 
-Conferir que voltaram antes de dar por encerrado:
-
-```bash
-npx skills list
-```
-
-Não usar `npx skills experimental_install` pra isso — ele restaura
-`.agents/` mas não recria o link do Claude Code, e o resultado é uma skill
-que existe em disco e mesmo assim não carrega.
+Não usar `npx skills experimental_install` pra isso — ele restaura `.agents/`
+mas não recria o link do Claude Code, e o resultado é uma skill que existe em
+disco e mesmo assim não carrega.
 
 Se a pasta já tem nome próprio (não genérico), pular essa fase.
 

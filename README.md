@@ -134,23 +134,24 @@ pra corrigir esse viés antes do cliente ver.
 
 ## Ferramentas
 
-O `/instalar` monta tudo. Se precisar refazer na mão:
+**As skills de design já vêm dentro do repo.** Você clona e elas funcionam —
+sem instalar nada, sem rede:
 
-```bash
-npx skills add https://github.com/pbakaus/impeccable --skill impeccable
-npx skills add https://github.com/leonxlnx/taste-skill --skill design-taste-frontend
-npx skills add microsoft/playwright-cli
-```
+| Peça | De onde vem |
+|---|---|
+| `impeccable` (constrói) | embutida, `.claude/skills/impeccable/` |
+| `design-taste-frontend` (régua) | embutida, `.claude/skills/design-taste-frontend/` |
+| `frontend-design-evaluator` (julga) | embutido, `.claude/agents/` |
+| `playwright-cli` (browser) | o `/instalar` baixa |
 
-O evaluator (`.claude/agents/frontend-design-evaluator.md`) já vem no repo.
+O browser é o único que precisa de instalação, porque baixa binário — e quem
+roda é o `/instalar`, você não digita nada.
 
-As três skills são de terceiros e não são versionadas aqui — assim elas
-atualizam sozinhas com `npx skills update`.
-
-**Se você renomear ou mover a pasta do projeto, rode os três comandos de
-novo.** O `npx skills add` cria um atalho com o caminho absoluto da pasta;
-renomear quebra o atalho e as skills somem sem dar erro. Um `npx skills list`
-mostra o que está de pé.
+As duas skills de design são de terceiros, embutidas com a licença original
+([impeccable](https://github.com/pbakaus/impeccable) é Apache-2.0,
+[taste-skill](https://github.com/leonxlnx/taste-skill) é MIT). O preço de
+embutir é que elas não atualizam sozinhas: procedência, versão e o passo a
+passo pra atualizar estão em `.claude/skills/PROCEDENCIA.md`.
 
 ---
 
