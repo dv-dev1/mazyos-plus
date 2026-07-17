@@ -100,6 +100,16 @@ aparecer sozinha e virar uma segunda opinião no meio da construção:
 grep -c "disable-model-invocation: true" .claude/skills/review-animations/SKILL.md
 ```
 
+**Não remova essa flag pra "facilitar a invocação".** Ela é o que garante que a
+skill nunca contamine uma construção — a `impeccable` é a única que constrói.
+O Claude não consegue invocar a skill diretamente por causa dela (a flag bloqueia
+qualquer invocação pelo modelo, não só a automática); quem faz a ponte é o agent
+`motion-reviewer`, que lê estes arquivos e segue eles. Se a flag sumir, a skill
+volta a poder aparecer sozinha no meio de um `craft`.
+
+Se o `SKILL.md` ou o `STANDARDS.md` mudarem de nome ou de estrutura na origem,
+ajustar o `.claude/agents/motion-reviewer.md`, que aponta pros dois por caminho.
+
 Depois de atualizar, **conferir se o caminho dos scripts continua o mesmo**:
 
 ```bash

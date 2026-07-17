@@ -127,11 +127,16 @@ de tentar enxergar no print.
 **Abaixo de 7 não sai.** O sistema aplica as melhorias e roda de novo, até
 três vezes. Passou de 7, você recebe o trabalho junto com a nota.
 
-**E confere a animação com a `review-animations`.** O evaluator julga por
+**E confere a animação com o `motion-reviewer`.** O evaluator julga por
 screenshot — e animação é invisível num print. Curva de easing, duração,
 interruptibilidade, de onde o popover nasce: nada disso aparece numa foto.
 Então tem um segundo juiz, esse lendo o código do motion, com régua do
 [Emil Kowalski](https://animations.dev) (o autor do Sonner e do Vaul).
+
+Isso não é teoria. Num ensaio com um cliente fictício, a página passou no juiz
+visual com 7,45 e **levou Block do juiz de motion** — que achou seis defeitos
+reais que o screenshot não mostrava, incluindo o botão de WhatsApp sem nenhum
+feedback ao toque no celular, que era o único objetivo da página.
 
 Ele bloqueia na hora: `transition: all`, entrada com `scale(0)` (nada
 aparece do nada), `ease-in` em UI (atrasa justo o instante que o usuário
@@ -159,7 +164,8 @@ sem instalar nada, sem rede:
 | `impeccable` (constrói) | embutida, `.claude/skills/impeccable/` |
 | `design-taste-frontend` (régua) | embutida, `.claude/skills/design-taste-frontend/` |
 | `frontend-design-evaluator` (julga o visual) | embutido, `.claude/agents/` |
-| `review-animations` (julga o motion) | embutida, `.claude/skills/review-animations/` |
+| `motion-reviewer` (julga o motion) | embutido, `.claude/agents/` |
+| `review-animations` (a régua do motion) | embutida, `.claude/skills/review-animations/` |
 | `animation-vocabulary` (nomeia efeito) | embutida, `.claude/skills/animation-vocabulary/` |
 | `playwright-cli` (browser) | o `/instalar` baixa |
 

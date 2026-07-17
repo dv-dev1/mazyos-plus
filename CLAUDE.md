@@ -156,7 +156,7 @@ E passar `http://localhost:3000` pro agent.
 exatamente o viés que ele existe pra corrigir — quem construiu é o pior
 juiz do que construiu.
 
-### 4. Avaliar o motion com a skill `review-animations`
+### 4. Avaliar o motion com o agent `motion-reviewer`
 
 Obrigatório **sempre que a peça tiver qualquer animação** — hover, scroll
 reveal, transição, entrada de modal, micro-interação. Se a página for
@@ -167,21 +167,28 @@ quase invisível num print. Curva de easing, duração, `transform-origin`,
 interruptibilidade, `prefers-reduced-motion`: nada disso aparece numa foto.
 Sem esse passo, o motion sai sem juiz nenhum.
 
-Ela lê o **código** do motion (não a página servida) e devolve uma tabela
-`Before | After | Why` mais um veredito:
+Rodar o agent `motion-reviewer` (`.claude/agents/`). Ele lê a régua da skill
+`review-animations` e julga o **código** do motion (não a página servida),
+devolvendo uma tabela `Before | After | Why` mais um veredito:
 
 - **Block:** não entrega. Aplicar os fixes na ordem da "Remedial Preference
-  Hierarchy" dela — a primeira opção é sempre **deletar a animação**, e
+  Hierarchy" — a primeira opção é sempre **deletar a animação**, e
   frequentemente é a certa. Rodar de novo.
 - **Approve:** entrega.
 
 Bloqueiam na hora: `transition: all`, `scale(0)` na entrada, `ease-in` em
 UI, duração acima de 300ms sem motivo, `transform-origin: center` em popover
 ancorado, animar `width`/`height`/`top`/`left`, e `prefers-reduced-motion`
-ausente.
+ausente **ou zerando tudo** (a régua manda "gentler, not zero": mantém
+opacidade e cor, tira o movimento).
 
-Ela tem `disable-model-invocation: true` — **só roda quando invocada
-explicitamente.** Não conta com ela aparecer sozinha; chamar pelo nome.
+**Por que um agent e não a skill direto.** A skill `review-animations` tem
+`disable-model-invocation: true` no frontmatter. Isso não bloqueia só a
+auto-invocação: bloqueia **qualquer** invocação pelo Claude, inclusive
+explícita pelo nome. Só você, digitando `/review-animations`, conseguiria
+chamar. O agent é a ponte — ele lê os arquivos da skill e segue eles. A skill
+continua cópia literal da origem e nunca contamina a construção; o passo
+continua automático.
 
 **Mesmo teto de 3 rodadas do passo 3.** Se depois de 3 ainda bloquear,
 parar e falar com o usuário. Não ficar em loop.
@@ -193,7 +200,8 @@ parar e falar com o usuário. Não ficar em loop.
 | `impeccable` | constrói | embutida (`.claude/skills/impeccable/`) | pbakaus |
 | `design-taste-frontend` | régua (critérios no evaluator) | embutida (`.claude/skills/design-taste-frontend/`) | leonxlnx |
 | `frontend-design-evaluator` | julga o visual | já vem no repo (`.claude/agents/`) | este projeto |
-| `review-animations` | julga o motion | embutida (`.claude/skills/review-animations/`) | emilkowalski |
+| `motion-reviewer` | julga o motion (lê a régua abaixo) | já vem no repo (`.claude/agents/`) | este projeto |
+| `review-animations` | a régua do motion | embutida (`.claude/skills/review-animations/`) | emilkowalski |
 | `animation-vocabulary` | nomeia efeito | embutida (`.claude/skills/animation-vocabulary/`) | emilkowalski |
 | `playwright-cli` | browser | `npx skills add microsoft/playwright-cli` | Microsoft |
 
