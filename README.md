@@ -86,8 +86,8 @@ devolve relatório semanal com alertas e recomendações.
 
 Essa é a diferença pro MazyOS original.
 
-Qualquer interface que o sistema construir passa por dois passos
-obrigatórios, sem você precisar pedir:
+Qualquer interface que o sistema construir passa por uma esteira
+obrigatória, sem você precisar pedir — uma skill constrói, duas julgam:
 
 **Constrói com a skill `impeccable`.** Direção estética deliberada,
 tipografia com personalidade, escolhas assumidas. Lê o
@@ -127,8 +127,25 @@ de tentar enxergar no print.
 **Abaixo de 7 não sai.** O sistema aplica as melhorias e roda de novo, até
 três vezes. Passou de 7, você recebe o trabalho junto com a nota.
 
-O ponto: quem construiu é o pior juiz do que construiu. O evaluator existe
-pra corrigir esse viés antes do cliente ver.
+**E confere a animação com a `review-animations`.** O evaluator julga por
+screenshot — e animação é invisível num print. Curva de easing, duração,
+interruptibilidade, de onde o popover nasce: nada disso aparece numa foto.
+Então tem um segundo juiz, esse lendo o código do motion, com régua do
+[Emil Kowalski](https://animations.dev) (o autor do Sonner e do Vaul).
+
+Ele bloqueia na hora: `transition: all`, entrada com `scale(0)` (nada
+aparece do nada), `ease-in` em UI (atrasa justo o instante que o usuário
+olha), animação acima de 300ms sem motivo, popover crescendo do centro em
+vez de crescer do botão que o abriu, e `prefers-reduced-motion` ausente. A
+primeira sugestão de conserto dele é sempre **deletar a animação** — e
+costuma ser a certa.
+
+Se você descrever o efeito de um jeito vago ("aquele negócio que quica
+quando abre"), a `animation-vocabulary` acha o nome exato ("Pop in") antes
+de qualquer código. Brief preciso é o que separa o resultado do genérico.
+
+O ponto de tudo: quem construiu é o pior juiz do que construiu. Os dois
+juízes existem pra corrigir esse viés antes do cliente ver.
 
 ---
 
@@ -141,17 +158,20 @@ sem instalar nada, sem rede:
 |---|---|
 | `impeccable` (constrói) | embutida, `.claude/skills/impeccable/` |
 | `design-taste-frontend` (régua) | embutida, `.claude/skills/design-taste-frontend/` |
-| `frontend-design-evaluator` (julga) | embutido, `.claude/agents/` |
+| `frontend-design-evaluator` (julga o visual) | embutido, `.claude/agents/` |
+| `review-animations` (julga o motion) | embutida, `.claude/skills/review-animations/` |
+| `animation-vocabulary` (nomeia efeito) | embutida, `.claude/skills/animation-vocabulary/` |
 | `playwright-cli` (browser) | o `/instalar` baixa |
 
 O browser é o único que precisa de instalação, porque baixa binário — e quem
 roda é o `/instalar`, você não digita nada.
 
-As duas skills de design são de terceiros, embutidas com a licença original
-([impeccable](https://github.com/pbakaus/impeccable) é Apache-2.0,
-[taste-skill](https://github.com/leonxlnx/taste-skill) é MIT). O preço de
-embutir é que elas não atualizam sozinhas: procedência, versão e o passo a
-passo pra atualizar estão em `.claude/skills/PROCEDENCIA.md`.
+As skills de terceiros vêm embutidas com a licença original
+([impeccable](https://github.com/pbakaus/impeccable) é Apache-2.0;
+[taste-skill](https://github.com/leonxlnx/taste-skill) e
+[emilkowalski/skills](https://github.com/emilkowalski/skills) são MIT). O
+preço de embutir é que elas não atualizam sozinhas: procedência, versão e o
+passo a passo pra atualizar estão em `.claude/skills/PROCEDENCIA.md`.
 
 ---
 

@@ -104,11 +104,12 @@ Pegar o template correspondente ao perfil escolhido na Fase 1 (`templates/perfis
 
 ## Fase 3.5 — Ferramentas de frontend
 
-**As skills de design já vieram no clone.** `impeccable` (constrói) e
-`design-taste-frontend` (régua) estão embutidas em `.claude/skills/` e
-funcionam sem instalar nada — ver `.claude/skills/PROCEDENCIA.md`. Não rodar
-`npx skills add` pra elas: isso instalaria a variante genérica por cima da
-que já está aqui.
+**As skills de design já vieram no clone.** `impeccable` (constrói),
+`design-taste-frontend` (régua), `review-animations` (julga o motion) e
+`animation-vocabulary` (nomeia efeito) estão embutidas em `.claude/skills/`
+e funcionam sem instalar nada — ver `.claude/skills/PROCEDENCIA.md`. Não
+rodar `npx skills add` pra elas: isso instalaria a variante genérica por
+cima da que já está aqui.
 
 Conferir que estão de pé (rápido, e pega clone corrompido):
 
@@ -169,9 +170,11 @@ Mostrar pro usuário o que foi configurado:
 ✓ Foco atual: _memoria/estrategia.md
 ✓ Marca: identidade/design-guide.md  [preenchida | em branco — preencher depois]
 ✓ CLAUDE.md adaptado pro perfil [perfil]
-✓ impeccable (constrói)        já vem no repo
-✓ design-taste-frontend (régua) já vem no repo
-✓ playwright-cli (browser)     [instalado | pendente — rodar npx skills add]
+✓ impeccable (constrói)         já vem no repo
+✓ design-taste-frontend (régua)  já vem no repo
+✓ review-animations (motion)     já vem no repo
+✓ animation-vocabulary           já vem no repo
+✓ playwright-cli (browser)      [instalado | pendente — rodar npx skills add]
 ```
 
 ---

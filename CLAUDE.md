@@ -50,14 +50,19 @@ padrão de repetição for claro.
 
 Vale pra **qualquer** interface: site de cliente, landing page, portfólio,
 página de captura, componente, app. Sempre que a tarefa produzir HTML/CSS
-que alguém vai olhar, os três passos abaixo são obrigatórios. Não são
-opcionais e não dependem do usuário pedir.
+que alguém vai olhar, os passos abaixo são obrigatórios. Não são opcionais
+e não dependem do usuário pedir.
 
-**Uma skill constrói, outra julga.** A `impeccable` constrói. A
-`design-taste-frontend` não é invocada junto — a régua dela virou critério
-do evaluator, que julga depois. Nunca invocar as duas pra construir a mesma
-peça: duas direções estéticas ao mesmo tempo viram briga de regra no meio
-da tarefa, não qualidade.
+**Uma skill constrói, as outras julgam.** A `impeccable` constrói — só ela.
+A `design-taste-frontend` não é invocada junto: a régua dela virou critério
+do evaluator, que julga depois. Nunca invocar duas skills pra construir a
+mesma peça: duas direções estéticas ao mesmo tempo viram briga de regra no
+meio da tarefa, não qualidade.
+
+Do lado de quem julga, dois juízes com escopos que não se sobrepõem: o
+`frontend-design-evaluator` olha o **visual** (screenshot, 3 viewports) e a
+`review-animations` olha o **motion** (código). O primeiro não consegue ver
+easing num print; o segundo não opina sobre cor.
 
 ### 1. Carregar o contexto antes de construir
 
@@ -103,10 +108,23 @@ produto), não `product`. O `PRODUCT.md` gerado pelo `/novo-projeto` já
 marca isso — conferir se estiver escrevendo o arquivo na mão.
 
 **Animação do site é aqui.** A `impeccable` cobre motion em `animate.md`,
-`interaction-design.md` e `overdrive.md`. Não instalar skill de GSAP por
-fora: o que falta nunca é a API da biblioteca, é o julgamento de quando
-animar. Vale a regra dela — uma animação de assinatura bem feita vale mais
-que micro-interação espalhada, e `prefers-reduced-motion` não é opcional.
+`interaction-design.md` e `overdrive.md`. Vale a regra dela — uma animação
+de assinatura bem feita vale mais que micro-interação espalhada, e
+`prefers-reduced-motion` não é opcional. Quem julga o resultado é a
+`review-animations` (passo 4).
+
+Não instalar skill de GSAP por fora. O que falta nunca é a API da
+biblioteca. E cuidado com as que vivem dentro de repo de vídeo (o
+`heygen-com/hyperframes` e afins): elas ensinam timeline **pausada**, feita
+pra um renderizador pular frame a frame. Site precisa do contrário —
+animação que toca no scroll, no hover, no load.
+
+**Se o usuário descrever um efeito de forma vaga** ("aquele negócio que
+quica quando abre", "tipo o scroll do iPhone"), invocar a skill
+`animation-vocabulary` pra achar o termo exato antes de construir. Ela só
+nomeia, não desenha. Brief preciso é o que separa o resultado do genérico —
+"Pop in com origem no gatilho" leva a impeccable a um lugar melhor que
+"deixa mais interativo".
 
 ### 3. Avaliar com o agent `frontend-design-evaluator`
 
@@ -138,13 +156,45 @@ E passar `http://localhost:3000` pro agent.
 exatamente o viés que ele existe pra corrigir — quem construiu é o pior
 juiz do que construiu.
 
+### 4. Avaliar o motion com a skill `review-animations`
+
+Obrigatório **sempre que a peça tiver qualquer animação** — hover, scroll
+reveal, transição, entrada de modal, micro-interação. Se a página for
+100% estática, pular.
+
+Existe porque o evaluator do passo 3 julga por **screenshot**, e animação é
+quase invisível num print. Curva de easing, duração, `transform-origin`,
+interruptibilidade, `prefers-reduced-motion`: nada disso aparece numa foto.
+Sem esse passo, o motion sai sem juiz nenhum.
+
+Ela lê o **código** do motion (não a página servida) e devolve uma tabela
+`Before | After | Why` mais um veredito:
+
+- **Block:** não entrega. Aplicar os fixes na ordem da "Remedial Preference
+  Hierarchy" dela — a primeira opção é sempre **deletar a animação**, e
+  frequentemente é a certa. Rodar de novo.
+- **Approve:** entrega.
+
+Bloqueiam na hora: `transition: all`, `scale(0)` na entrada, `ease-in` em
+UI, duração acima de 300ms sem motivo, `transform-origin: center` em popover
+ancorado, animar `width`/`height`/`top`/`left`, e `prefers-reduced-motion`
+ausente.
+
+Ela tem `disable-model-invocation: true` — **só roda quando invocada
+explicitamente.** Não conta com ela aparecer sozinha; chamar pelo nome.
+
+**Mesmo teto de 3 rodadas do passo 3.** Se depois de 3 ainda bloquear,
+parar e falar com o usuário. Não ficar em loop.
+
 ### Ferramentas
 
 | Peça | Papel | De onde vem | Dono |
 |---|---|---|---|
 | `impeccable` | constrói | embutida (`.claude/skills/impeccable/`) | pbakaus |
 | `design-taste-frontend` | régua (critérios no evaluator) | embutida (`.claude/skills/design-taste-frontend/`) | leonxlnx |
-| `frontend-design-evaluator` | julga | já vem no repo (`.claude/agents/`) | este projeto |
+| `frontend-design-evaluator` | julga o visual | já vem no repo (`.claude/agents/`) | este projeto |
+| `review-animations` | julga o motion | embutida (`.claude/skills/review-animations/`) | emilkowalski |
+| `animation-vocabulary` | nomeia efeito | embutida (`.claude/skills/animation-vocabulary/`) | emilkowalski |
 | `playwright-cli` | browser | `npx skills add microsoft/playwright-cli` | Microsoft |
 
 **As skills de design são versionadas dentro do repo.** Clonou, funcionam —

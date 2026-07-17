@@ -37,6 +37,19 @@ Skills externas prontas pra instalar. Use como referencia ao criar skills novas 
 **Bom pra:** Julgar se uma pagina tem cara de template. NAO usar pra construir.
 **Como instalar:** ja vem embutida no repo (`.claude/skills/design-taste-frontend/`)
 **Fonte:** leonxlnx/taste-skill (MIT). Ver `.claude/skills/PROCEDENCIA.md`
+
+### Review Animations (regua do motion)
+**O que faz:** Revisa codigo de animacao contra 10 padroes nao-negociaveis do Emil Kowalski (autor do Sonner e do Vaul): UI abaixo de 300ms, `ease-out` nunca `ease-in`, popover crescendo do gatilho e nao do centro, nunca `scale(0)` na entrada, so `transform` e `opacity`, `prefers-reduced-motion` respeitado. Devolve tabela `Before | After | Why` e veredito Block/Approve.
+**Bom pra:** Julgar o motion de qualquer peca com animacao. NAO usar pra construir.
+**Como instalar:** ja vem embutida no repo (`.claude/skills/review-animations/`)
+**Fonte:** emilkowalski/skills (MIT). Ver `.claude/skills/PROCEDENCIA.md`
+**Atencao:** tem `disable-model-invocation: true` — so roda quando invocada pelo nome, nao aparece sozinha. Existe porque o `frontend-design-evaluator` julga por screenshot, e animacao nao aparece em print.
+
+### Animation Vocabulary (nomeia o efeito)
+**O que faz:** Traduz descricao vaga de efeito no termo exato. "Aquele negocio que quica quando abre" vira "Pop in"; "o scroll do iPhone" vira "Rubber-banding".
+**Bom pra:** Fechar o brief antes de construir. So nomeia, nao desenha.
+**Como instalar:** ja vem embutida no repo (`.claude/skills/animation-vocabulary/`)
+**Fonte:** emilkowalski/skills (MIT). Ver `.claude/skills/PROCEDENCIA.md`
 **Atencao:** os criterios dela ja estao embutidos no agent `frontend-design-evaluator`. Nao invocar junto com a `impeccable` pra construir a mesma peca — duas direcoes esteticas ao mesmo tempo viram briga de regra, nao qualidade.
 
 ---

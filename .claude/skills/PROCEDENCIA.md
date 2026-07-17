@@ -15,6 +15,8 @@ como atualizar.
 |---|---|---|---|
 | `impeccable/` | constrói interface | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | Apache-2.0 |
 | `design-taste-frontend/` | régua anti-cara-de-IA | [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill) | MIT |
+| `review-animations/` | julga o motion | [emilkowalski/skills](https://github.com/emilkowalski/skills) | MIT |
+| `animation-vocabulary/` | nomeia efeito de motion | [emilkowalski/skills](https://github.com/emilkowalski/skills) | MIT |
 
 **Versão embutida:**
 
@@ -22,6 +24,18 @@ como atualizar.
   copiado de `.claude/skills/impeccable/` do repo de origem
 - `design-taste-frontend` — commit `7b3782a65f89eb53ab67af4ac40b689704e5a876`
   (2026-07-16), copiado de `skills/taste-skill/SKILL.md` do repo de origem
+- `review-animations` e `animation-vocabulary` — commit
+  `6bf24434f7730ad169077756cf9c7cd7bd675fc6` (2026-07-15), copiados de
+  `skills/<nome>/` do repo de origem
+
+**Por que só 2 das 6 do emilkowalski.** O repo tem 6 skills; as outras 4
+ficaram de fora de propósito. `emil-design-eng` e `apple-design` **constroem**
+interface e auto-invocam — competiriam com a `impeccable` pelo papel de
+construtora, e a `apple-design` ainda imporia a estética da Apple por cima do
+`identidade/design-guide.md`. `improve-animations` e
+`find-animation-opportunities` fazem o que a `review-animations` já faz.
+Se um dia alguém quiser reavaliar, o critério é esse: **uma constrói, as
+outras julgam.**
 
 **Modificações:** nenhuma. Os arquivos são cópia literal da origem. Se algum
 dia forem modificados, registrar aqui — a Apache-2.0 exige sinalizar alteração.
@@ -61,15 +75,29 @@ Não existe comando mágico. É cópia manual, e é rápido:
 # 1. Pegar a origem num diretório temporário
 git clone --depth 1 https://github.com/pbakaus/impeccable /tmp/impeccable
 git clone --depth 1 https://github.com/leonxlnx/taste-skill /tmp/taste-skill
+git clone --depth 1 https://github.com/emilkowalski/skills /tmp/emilskills
 
-# 2. Substituir (o -delete tira arquivo que sumiu na origem)
+# 2. Substituir (o --delete tira arquivo que sumiu na origem)
 rsync -a --delete /tmp/impeccable/.claude/skills/impeccable/ .claude/skills/impeccable/
 cp /tmp/impeccable/LICENSE .claude/skills/impeccable/LICENSE
 cp /tmp/taste-skill/skills/taste-skill/SKILL.md .claude/skills/design-taste-frontend/SKILL.md
+rsync -a --delete /tmp/emilskills/skills/review-animations/ .claude/skills/review-animations/
+rsync -a --delete /tmp/emilskills/skills/animation-vocabulary/ .claude/skills/animation-vocabulary/
+cp /tmp/emilskills/LICENSE .claude/skills/review-animations/LICENSE
+cp /tmp/emilskills/LICENSE .claude/skills/animation-vocabulary/LICENSE
 
 # 3. Anotar os commits novos neste arquivo
 git -C /tmp/impeccable log -1 --format="%H (%ad)" --date=short
 git -C /tmp/taste-skill log -1 --format="%H (%ad)" --date=short
+git -C /tmp/emilskills log -1 --format="%H (%ad)" --date=short
+```
+
+Ao atualizar as do emilkowalski, conferir que a `review-animations` continua
+com `disable-model-invocation: true` no frontmatter. É isso que impede ela de
+aparecer sozinha e virar uma segunda opinião no meio da construção:
+
+```bash
+grep -c "disable-model-invocation: true" .claude/skills/review-animations/SKILL.md
 ```
 
 Depois de atualizar, **conferir se o caminho dos scripts continua o mesmo**:
